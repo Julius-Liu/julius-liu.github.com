@@ -30,7 +30,7 @@ zhihu_username:
 markdown: kramdown
 kramdown:
   input: GFM
-highlighter: pygments
+highlighter: rouge	# pygments not support on Github on 2/2/2016
 
 gems: [jekyll-paginate]
 permalink: none
