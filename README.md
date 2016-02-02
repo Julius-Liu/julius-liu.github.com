@@ -1,11 +1,12 @@
-# Microdust 微尘
+# JuliusEli 俊仔
 
-This is a blog created by Azeril. The blog is live at [azeril.me](http://azeril.me/).
+This is a blog created by Julius. The blog is live at [julius-liu.github.com](http://julius-liu.github.com/).
 
 ## Thanks
 
-The blog used many tool/service,many thanks to:
+The blog used many tool/service, many thanks to:
 
+* [azeril.me](http://azeril.me), You are my dear tutor and idol!
 * [Github](https://github.com/), all the data based on;
 * [Git](https://git-scm.com/), blogs and code files version control system;
 * [Jekyll](http://jekyllrb.com/), a static site generator;
