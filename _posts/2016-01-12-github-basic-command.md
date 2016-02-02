@@ -7,7 +7,7 @@ descriptions: 使用 Git 将本地代码上传到 Github - 简单命令
 ---
 
 ## 1. 注册Github账号 ##
-到[Github](https://github.com/)注册Github账号。
+到 [Github](https://github.com/) 注册Github账号。
 
 ## 2. 在Github上建立Github仓库 ##
 1) 登录后点击右下方的“new repository”按钮新建一个仓库
@@ -46,7 +46,7 @@ descriptions: 使用 Git 将本地代码上传到 Github - 简单命令
 到该目录找到.ssh文件夹（id_rsa为私钥文件，id_rsa.pub为公钥文件） <br/>
 使用记事本打开id_rsa.pub文件并复制文件内容 <br/> 
 到GitHub中点击右上角的进入 personal settings 进行设置 <br/>
-![person-settings-ssh](/images/github-basic-command/person-settings-ssh.png) <br/>
+![person-settings-ssh](/images/github-basic-command/personal-settings-ssh.PNG) <br/>
 然后选择左边栏中的SSH Keys添加SHH Key粘贴刚才复制的内容到Key文本框中，title文本框中填写有意义的title。
 
 ## 6. 创建本地仓库并上传代码到GitHub ##
