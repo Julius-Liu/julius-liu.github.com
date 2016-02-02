@@ -2,7 +2,7 @@
 title: JuliusEli
 header-img: "img/clean-blog-bg.jpg"
 tagline: "tagline"  
-description: "生死契阔 与子成说 执子之手 与子偕老"  
+description: "生死契阔 与子成说"  
 baseurl: ""
 url: "http://julius-liu.github.io"  
 #url: "http://localhost:4000"
@@ -51,16 +51,16 @@ defaults:
       type: "posts"
     values:
       layout: "post"
-      author: "Azeril"
-      header-img: "img/fantasy.jpg" # We don't want posts without a header image, that whould mean white on white
+      author: "Julius"
+      header-img: "img/clean-blog-bg.jpg"  # We don't want posts without a header image, that whould mean white on white
 
 # Comments 
 comments :
   provider : duoshuo
   duoshuo :
-    short_name : Azeril
+    short_name : Julius
   disqus :
-      short_name : Azeril
+      short_name : Julius
 
 # Analytics and webmaster tools stuff goes here
 google_analytics: UA-66863061-1

@@ -1,7 +1,9 @@
 ---
-layout: page
+layout: post
 title: Markdown 基本语法
-tags : 笔记
+categories: [blog]
+tags : [笔记, ]
+description: Markdown 基本语法
 ---
 
 ## Markdown宗旨 ##
