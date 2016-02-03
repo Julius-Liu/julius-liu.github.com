@@ -5,9 +5,8 @@ description: "嘿，你总算找到我啦"
 header-img: "img/plane.jpg"
 ---
 
-
 <center>
-![I'm breaking bad.](/images/breaking-bad.png)
+  <p><img src="/images/breaking-bad.png" align="center"></p>
 </center>
 
 ## Tags ##
@@ -17,4 +16,4 @@ header-img: "img/plane.jpg"
 *	爱看小说，特别爱看武侠
 *	笑点低
 *	推理类电影控
-*	最大的心愿：还原生活的本来面貌。
+*	最大的心愿：还原生活的本来面貌
