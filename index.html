@@ -2,9 +2,6 @@
 layout: page
 description: "Wired in."
 ---
-<div align="right">
-	<input id="J_search" placeholder="Simple Search"/>
-</div>
 {% for post in paginator.posts %}
 <div class="post-preview">
     <a href="{{ post.url | prepend: site.baseurl }}">
@@ -50,31 +47,6 @@ description: "Wired in."
 
   ga('create', 'UA-66863061-1', 'auto');
   ga('send', 'pageview');
-
-	$(function() {
-        $.ajax({
-            url: "search.xml",
-            dataType: "xml",
-            success: function( xmlResponse ) {
-                var data = $( "article", xmlResponse ).map(function() {
-                    return {
-                        value: $( "title", this ).text() + ", " +
-                            ( $.trim( $( "date", this ).text() ) ),
-                        desc: $("description", this).text(),
-                        url: $("url", this).text()
-                    };
-                }).get();
-
-                $( "#J_search" ).autocomplete({
-                    source: data,
-                    minLength: 0,
-                    select: function( event, ui ) {
-                        window.location.href = ui.item.url;
-                    }
-                });
-            }
-        });
-    });
 
 </script>
 
