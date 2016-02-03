@@ -2,7 +2,7 @@
 layout: post
 title: Markdown 基本语法
 categories: [blog]
-tags : [Markdown, 前段开发]
+tags : [Markdown, 前端开发]
 description: Markdown 基本语法
 ---
 快速跳转：<br>
