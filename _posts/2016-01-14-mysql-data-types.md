@@ -52,3 +52,7 @@ description: MySQL 数据类型
 
 > 即便 `DATETIME` 和 `TIMESTAMP` 返回相同的格式，它们的工作方式很不同。在 `INSERT` 或 `UPDATE` 查询中，`TIMESTAMP` 自动把自身设置为当前的日期和时间。`TIMESTAMP` 也接受不同的格式，比如 YYYYMMDDHHMMSS、YYMMDDHHMMSS、YYYYMMDD 或 YYMMDD。
 
+<br/>
+
+<div align="right">摘录自 W3School 的 MySQL 数据类型</div>
+<div align="right">首次创建时间：2014-03-02</div>

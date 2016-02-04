@@ -11,11 +11,9 @@ descriptions: 使用 Git 将本地代码上传到 Github - 简单命令
 
 ## 2. 在Github上建立Github仓库 ##
 1) 登录后点击右下方的“new repository”按钮新建一个仓库
-
 ![new-repository](/images/github-basic-command/new-repository.png) 
 
 2) 填写完仓库信息后点击“creat repository”按钮创建仓库（仓库名字随意填写）
-
 ![create-repository](/images/github-basic-command/create-repository.png)
 
 ## 3. 下载并安装git版本管理工具 ##
