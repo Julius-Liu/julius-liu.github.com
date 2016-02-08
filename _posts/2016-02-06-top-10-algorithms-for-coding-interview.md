@@ -12,7 +12,7 @@ description: 程序员面试的Top10算法概念
 
 [1) String / Array](#1) &ensp; [2) Matrix](#2) &ensp; [3) Linked List](#3) &ensp; [4) Tree / Heap](#4) <br/>
 [5) Graph](#5) &ensp; [6) Sorting](#6) &ensp; [7) Recursion / Iteration](#7) &ensp; [8) Dynamic Programming](#8) <br/>
-[9) Bit Manipulation](#9) &ensp; [10) Combinations&Permutations](#10) &ensp; [11) Math Problems](#11) <br/>
+[9) Bit Manipulation](#9) &ensp; [10) Combinations / Permutations](#10) &ensp; [11) Math Problems](#11) <br/>
 
 如果你需要了解Java的基础知识，我十分建议你阅读 "[Simple Java](http://www.programcreek.com/simple-java/)"。如果你想要知道使用一个流行的API的具体实例，你可以在 [JavaSED.com](http://www.javased.com/) 找到。
 
@@ -610,5 +610,4 @@ public static boolean getBit(int num, int i) {
 [16) Product of Array Except Self](http://www.programcreek.com/2014/07/leetcode-product-of-array-except-self-java/) <br/>
 
 <br/>
-
-2/6/2016 10:16:30 PM 
+<div align="right">2/6/2016 10:16:30 PM</div> 
