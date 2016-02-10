@@ -2,7 +2,7 @@
 layout: post
 title: 富贵竹养殖小贴士
 categories: blog
-tages: [绿植]
+tags: [绿植]
 description: 富贵竹养殖小贴士
 ---
 
