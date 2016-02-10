@@ -18,19 +18,18 @@ Markdown 的目标是实现「易读易写」。<br/>
 
 <h2 id="2">段落和换行</h2>
 一个 Markdown 段落是由一个或多个连续的文本行组成，它的前后要有一个以上的空行（空行的定义是显示上看起来像是空的，便会被视为空行。比方说，若某一行只包含空格和制表符，则该行也会被视为空行）。普通段落不该用空格或制表符来缩进。<br>
-「由一个或多个连续的文本行组成」这句话其实暗示了 Markdown 允许段落内的强迫换行（插入换行符），这个特性和其他大部分的 text-to-HTML 格式不一样（包括 Movable Type 的「Convert Line Breaks」选项），其它的格式会把每个换行符都转成 `<br />` 标签。
-
-> Julius: 现在还是觉得，使用 `<br/>` 标签比较方便简洁。	
-
+「由一个或多个连续的文本行组成」这句话其实暗示了 Markdown 允许段落内的强迫换行（插入换行符），这个特性和其他大部分的 text-to-HTML 格式不一样（包括 Movable Type 的「Convert Line Breaks」选项），其它的格式会把每个换行符都转成 `<br />` 标签。<br/>
+为了中文段落的样式美观，通常会在段首使用首行缩进。实现首行缩进，可以采用以下两个方法：
+1. 插入2个**全角**状态下的空格
+1. 插入4个`&#160;`，这是HTML空格的ASCII码
 <br/>
 
 <h2 id="3">标题</h2>
-标题应该是Markdown文件中最常用的一类标记。<br/>
-推荐使用**类 Atx 形式**来创建标题，方法是是在行首插入 1 到 6 个 # ，对应到标题 1 到 6 阶。<br/>
+标题应该是Markdown文件中最常用的一类标记。
+推荐使用**类 Atx 形式**来创建标题，方法是是在行首插入 1 到 6 个 # ，对应到标题 1 到 6 阶。
 另外，可以在末尾闭合行首的#，就像这样：
 
 `## 这里是二级标题 ##`
-
 <br/>
 
 <h2 id="4">区块引用</h2>
@@ -52,7 +51,6 @@ Markdown 标记区块引用是使用类似 email 中用 > 的引用方式。如�
 > 
 > Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
   id sem consectetuer libero luctus adipiscing.
-
 <br/>
 
 <h2 id="5">列表</h2>
@@ -75,11 +73,10 @@ Markdown 标记区块引用是使用类似 email 中用 > 的引用方式。如�
 1. 有序列表，项目1
 1. 有序列表，项目2
 1. 有序列表，项目3
-
 <br/>
 
 <h2 id="6">代码区块</h2>
-要手动创建代码区块，在写完一行以后，按下**Enter**，然后按一个**Tab**，Tab后的段落就会以它原本的形式出现。<br/>
+要手动创建代码区块，在写完一行以后，按下**Enter**，然后按一个**Tab**，Tab后的段落就会以它原本的形式出现。
 下一行仍旧使用**Tab**开头，也会变成代码的第二行。<br/>
 以下代码，截取自Timer.cpp
 
@@ -120,7 +117,6 @@ Markdown 标记区块引用是使用类似 email 中用 > 的引用方式。如�
 
 		return msg.wParam;
 	}
-
 <br/>
 
 <h2 id="7">分割线</h2>
@@ -136,24 +132,21 @@ Markdown 标记区块引用是使用类似 email 中用 > 的引用方式。如�
 ***
 
 上面是一条分割线
-
 <br/>
 
 <h2 id="8">链接</h2>
-Markdown 支持两种形式的链接语法： 行内式和参考式两种形式。<br/>
-不管是哪一种，链接文字都是用 **[方括号]** 来标记。<br/>
+Markdown 支持两种形式的链接语法： 行内式和参考式两种形式。
+不管是哪一种，链接文字都是用 **[方括号]** 来标记。
 要建立一个**行内式**的链接，只要在方块括号后面紧接着圆括号并插入网址链接即可，如果你还想要加上链接的 title 文字，只要在网址后面，用双引号把 title 文字包起来即可，有了**title**属性后，当鼠标移至链接标题，将会出现提示。<br/>
 
 举例如下：
 
     This is [baidu](http://www.baidu.com "这里是百度的行内式链接！") inline link.
-    
     This [baidu link](http://www.baidu.com) has no title attribute.
 
 显示结果如下：
 
 This is [baidu](http://www.baidu.com/ "这里是百度的行内式链接！") inline link.
-
 This [baidu link](http://www.baidu.com/) has no title attribute.
 
 **参考式**的链接是在链接文字的括号后面再接上另一个方括号，而在第二个方括号里面要填入用以辨识链接的标记：<br/>
@@ -167,7 +160,6 @@ This [baidu link](http://www.baidu.com/) has no title attribute.
 显示结果如下：
 
 This is [baidu] [baidu_id] reference-style link.
-
 [baidu_id]: http://www.baidu.com  "这里是百度的参考式链接！"
 
 **隐式**链接标记功能让你可以省略指定链接标记，这种情形下，链接标记会视为等同于链接文字，要用隐式链接标记只要在链接文字后面加上一个空的方括号，如果你要让 "baidu" 链接到 www.baidu.com，你可以简化成：<br/>
@@ -184,7 +176,7 @@ This is [baidu] [baidu_id] reference-style link.
 
 [baidu]: http://www.baidu.com "这里是百度的隐式链接！"
 
-如果你觉得“baidu”这个变量名太长，也可以使用标号的方式：<br/>
+如果你觉得“baidu”这个变量名太长，也可以使用**标号**的方式：<br/>
 
     这里是 [百度][1] 的链接。
     这里是 [新浪][2] 的链接。
@@ -194,15 +186,20 @@ This is [baidu] [baidu_id] reference-style link.
 显示效果如下：
 
 这里是 [百度][1] 的链接。
-
 这里是 [新浪][2] 的链接。
 
 [1]: http://www.baidu.com "这里是百度的隐式链接！"
-
 [2]: http://www.sina.com.cn "这里是新浪的隐式链接！"
 
->优点：使用**参考式**链接或者**隐式**链接，可以让文件更像是浏览器最后产生的结果，可以增加链接而不让文章的阅读感觉被打断。
+当然如果你想提供一个最简单链接，可以使用**自动链接**的方式：
 
+	<http://www.baidu.com>
+
+显示效果如下：
+
+<http://www.baidu.com>
+
+> 优点：使用**参考式**链接或者**隐式**链接，可以让文件更像是浏览器最后产生的结果，可以增加链接而不让文章的阅读感觉被打断。
 <br/>
 
 <h2 id="9">图片</h2>
@@ -211,7 +208,6 @@ Markdown 使用一种和链接很相似的语法来标记图片，同样也允�
 行内式的图片语法看起来像是：
 
     ![代替文字](/assets/images/cat.jpg)
-    
     ![代替文字](/assets/images/cat.jpg "可选的title")
 
 参考式的图片语法则长得像这样：
@@ -227,7 +223,6 @@ Markdown 使用一种和链接很相似的语法来标记图片，同样也允�
 ![cat image gone...][catImage]
 
 [catImage]: /images/cat.JPG "为什么不给饭吃。。"
-
 <br/>
 
 <h2 id="10">强调</h2>
@@ -242,7 +237,6 @@ Markdown 使用星号（*）和底线（_）作为标记强调字词的符号，
 
 *这里是斜体文字* <br/>
 **这里是粗体文字**
-
 <br/>
 
 <h2 id="11">代码</h2>
@@ -257,7 +251,6 @@ Use the `printf()` function.
 这段语法会产生：
 
     <p><code>There is a literal backtick (`) here.</code></p>
-
 <br/>
 
 <h2 id="12">反斜杠转义</h2>
@@ -285,8 +278,9 @@ Markdown 支持以下这些符号前面加上反斜杠来帮助插入普通的�
     !   惊叹号
 
 快速跳转：<br>
-[Markdown宗旨](#1) &ensp; [段落和换行](#2) &ensp; [标题](#3) &ensp; [区块引用](#4) <br/>
-[列表](#5) &ensp; [代码区块](#6) &ensp; [分割线](#7) &ensp; [链接](#8) <br/>
-[图片](#9) &ensp; [强调](#10) &ensp; [代码](#11) &ensp; [反斜杠转义](#12) <br/>
+[Markdown宗旨](#1) &ensp; [段落和换行](#2) &ensp; [标题](#3) &ensp; [区块引用](#4) 
+[列表](#5) &ensp; [代码区块](#6) &ensp; [分割线](#7) &ensp; [链接](#8) 
+[图片](#9) &ensp; [强调](#10) &ensp; [代码](#11) &ensp; [反斜杠转义](#12)
+<br/>
 
-2/2/2016 2:49:24 PM 
+<div align="right">2016-02-10 星期三 8:59:20 PM</div>
