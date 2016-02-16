@@ -7,6 +7,7 @@ header-img: "img/plane.jpg"
 
 <center>
   <p><img src="/images/breaking-bad.png" align="center"></p>
+  <p>**成立于2016年1月11日**</p>
 </center>
 
 ## Tags ##
