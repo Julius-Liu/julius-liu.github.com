@@ -16,3 +16,33 @@ description: MySQL 的外键约束
 1. 删除主键表记录时，你可以在建外键时选定外键记录的级联操作，是“级联删除”还是“拒绝删除”。
 1. 更新主键记录时，同样有“级联更新”和“拒绝执行”的选择。
 
+添加外键的两种方法：
+
+1) 在创建表的时候
+
+    CREATE TABLE table_name (
+      column_name1 data_type
+	  column_name2 data_type
+      KEY index_name (index_column),
+      CONSTRAINT foreign_key_name
+	    FOREIGN KEY (foreign_key_column) 
+		REFERENCES table_name (table_column)
+		[ON DELETE reference_option]
+		[ON UPDATE reference_option]
+    )
+
+	reference_option:
+    	RESTRICT | CASCADE | SET NULL | NO ACTION
+
+2) 在修改表的时候
+
+    ALTER TABLE table_name ADD INDEX index_name ( index_column );
+    ALTER TABLE table_name ADD CONSTRAINT foreign_key_name
+      FOREIGN KEY ( foreign_key_column ) 
+      REFERENCES table_name ( table_column ) 
+      [ON DELETE reference_option]
+      [ON UPDATE reference_option]
+
+	reference_option:
+    	RESTRICT | CASCADE | SET NULL | NO ACTION
+
