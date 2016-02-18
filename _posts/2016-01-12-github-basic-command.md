@@ -2,7 +2,7 @@
 layout: post
 title: 使用 Git 将本地代码上传到 Github - 简单命令
 categories: [blog]
-tags : [Git, 版本管理工具]
+tags : [Git]
 descriptions: 使用 Git 将本地代码上传到 Github - 简单命令
 ---
 
