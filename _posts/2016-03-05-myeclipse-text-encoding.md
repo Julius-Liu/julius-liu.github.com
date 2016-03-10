@@ -8,6 +8,7 @@ description: 字符编码知识整理
 ---
 
 　　使用新安装的 myeclipse 打开了曾经的项目，发现原来的中文注释，全部变成乱码了。于是头皮一阵发麻，对于喜欢透明的程序员来说，看不懂又想要弄明白的乱码十分揪心。
+
 　　网上搜索了一阵，发现原因是新安装的 myeclipse 默认使用 cp1252 编码，只要将其改成支持中文字符的 UTF-8 即可解决中文乱码问题。
 
 1. Preferences -> General -> Workspace -> Text file encoding
