@@ -52,6 +52,95 @@ CGLIB 代理
 - **Around advice** : Advice that surrounds a join point such as a method invocation. This is the most powerful kind of advice. Around advice can perform custom behavior before and after the method invocation. It is also responsible for choosing whether to proceed to the join point or to shortcut the advised method execution by returning its own return value or throwing an exception.
 - **Julius：环绕通知**：环绕通知是包围住连接点的通知，可以在连接点的前面或后面执行自定义的方法。环绕通知可以决定是否执行连接点的方法，或者绕过连接点的方法。绕过的方式是返回环绕通知自己的值或者抛出一个异常。
 
+## PressSystem 项目中 Spring AOP 需要的组件
+
+> 以下提到的组件，是实现 Spring AOP 的组件最小子集
+
+- **XuanTiController.java** 
+@Autowired
+private XuanTiService xuanTiService;
+下面有：
+xuanTiService.save(xuanTi);
+xuanTiService.update(xuanTi);
+xuanTiService.delete(id, "XuanTi");
+- **XuanTiService.java**
+这个只是 interface
+有如下的接口：
+void save(XuanTi xuanTi);
+boolean update(XuanTi xuanTi);
+boolean delete(String id, String table_name);
+- **XuanTiServiceImpl.java**
+实现了 XuanTiService 接口
+有如下实现：
+public void save(XuanTi xuanTi) {...}
+public boolean update(XuanTi xuanTi) {...}
+public boolean delete(String id, String table_name) {...}
+- **LogAspect.java**
+有 @Aspect 标记
+@Autowired
+private LogService logService;
+有多个通知
+每个通知，有不同类型的通知的 @AspectJ 方式的标记，例如 @AfterReturning, @Around
+每个通知，有 pointcut 配置，即每个通知要切入到哪里
+- **spring-common.xml**
+`<aop:aspectj-autoproxy />`
+注释：如果Spring决定一个bean要被切入，那么Spring就会为这个bean自动生成代理来插入外来的方法，保证通知被执行
+`<bean class="com.tgb.service.impl.XuanTiServiceImpl" />`
+`<bean class="com.tgb.service.impl.BookServiceImpl" />`
+注释：要切入的逻辑对象，这些是连接点
+`<bean id="logAspect" class="com.tgb.utils.LogAspect" />`
+注释：日志 AOP
+`<bean id="LogService" class="com.tgb.service.impl.LogServiceImpl" />`
+注释：日志记录业务逻辑对象
+`<context:annotation-config />`
+注释：启用注解配置方式，比如说启用了 @Autowired
+
+## PressSystem 项目中 Spring AOP 的切入机制
+
+1. 总的来说，是 LogAspect 这个 bean 切入了 XuanTiServiceImpl 这个 bean
+2. 在 **spring-common.xml** 配置文件中，声明了 **XuanTiServiceImpl** 和 **LogAspect** 2个 bean
+`<bean class="com.tgb.service.impl.XuanTiServiceImpl" />`
+`<bean id="logAspect" class="com.tgb.utils.LogAspect" />`
+3. 在 LogAspect 中，有很多配置，看如下的3行。这些配置指定了**saveLogInsert**,**updateLogInsert** 和 **deleteLogInsert** 这三个通知要切入 **XuanTiServiceImpl**
+有如上所示的3个通知
+每个通知，有不同类型的通知的 @AspectJ 方式的标记，例如 @AfterReturning, @Around
+每个通知，有 pointcut 配置，即每个通知要切入到哪里
+4. AOP 的实现方式是通过代理实现的。所以在 **spring-common.xml** 中指定了 autoproxy，为 **XuanTiServiceImpl** 创建代理，如下所示：
+`<aop:aspectj-autoproxy />`
+注释：如果Spring决定一个bean要被切入，那么Spring就会为这个 bean 自动生成代理来插入外来的方法，保证通知被执行
+5. 在 XuanTiServiceImpl 中有如下3个方法，这3个方法符合 pointcut 的描述，因此具体地来说，这3个方法就是**切入点**，它们被顺利地切入了
+public void save(XuanTi xuanTi) {...}
+public boolean update(XuanTi xuanTi) {...}
+public boolean delete(String id, String table_name) {...}
+
+
+## PressSystem 项目中 Spring AOP 机制的调用过程
+
+> 以下描述，主要涉及2点，可以概括为 @Aspect 和 @Autowired
+> @Aspect 就是“切入机制”，@AfterReturning, @Around, pointcut, `<aop:aspectj-autoproxy />` 等知识点都属于这个知识体系
+> @Autowired 是“自动绑定机制”，@Component 注解，广义的 bean 等知识点属于 @Autowired 的基础知识体系
+> 说明：以上3句话，是作者的粗浅认知
+> 题外话：下面所提到的调用过程，是 Spring AOP 相关的过程最小子集
+
+1. XuanTiController 被调用了，具体来说，其中的 xuanTiService.save(xuanTi); 被调用了
+2. 因为在 XuanTiController 有标注为 @Autowired 的 xuanTiService，所以 Application 会去查找 xuanTiService 这个 bean
+3. 至于为什么会去查找 xuanTiService 这个 bean 呢，是因为 **spring-common.xml** 中的配置
+`<context:annotation-config />`
+注释：启用注解配置方式，比如说启用了 @Autowired
+4. XuanTiService 只是一个 interface，实现它的是 XuanTiServiceImpl
+5. XuanTiServiceImpl 这个 bean 找到了，因为在 **spring-common.xml** 中有配置
+`<bean class="com.tgb.service.impl.XuanTiServiceImpl" />`
+6. xuanTiService.save(xuanTi); 被执行了，具体来说，是 XuanTiServiceImpl 中的  public void save(XuanTi xuanTi) {...} 被执行了
+7. 根据上一章节“切入机制”的描述，在执行 public void save(XuanTi xuanTi) {...} 的时候，会伴随着执行 LogAspect 中的 saveLogInsert 方法
+8. 在 LogAspect 中，有标注为 @Autowired 的 logService，所以 Application 会去查找 logService 这个 bean
+9. 查找的原因，就是第3点所描述的
+10. LogService 只是一个 interface，实现它的是 LogServiceImpl
+11. XuanTiServiceImpl 这个 bean 找到了，因为在 **spring-common.xml** 中有配置
+`<bean id="LogService" class="com.tgb.service.impl.LogServiceImpl" />`
+注释：日志记录业务逻辑对象
+12. logService.log(log); 被执行了，具体来说，是 LogServiceImpl 中的 public void log(Log log) {...} 被执行了
+
+
 
 AOP Proxies 简单介绍
 
@@ -89,4 +178,4 @@ Introductions 简单介绍
 
 <br/>
 
-<div align="right">4/22/2016 10:54:56 AM </div>
+<div align="right">4/25/2016 5:26:58 PM </div>
