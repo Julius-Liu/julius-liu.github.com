@@ -7,8 +7,8 @@ tags: [JavaEE]
 description: Spring AOP 知识整理
 ---
 
-　　通过一个多月的 Spring AOP 的学习，掌握了 Spring AOP 的基本概念。AOP 是面向切面的编程（Aspect-Oriented Programming），是基于 OOP（面向对象的编程，Object-Oriented Programming）开发的一套程序架构。
-　　个人粗浅的认为，在企业级的软件架构中，有许多分布式的软件架构。这就要求一段通用性的事务使用在软件中的许多模块。我所能想到的有交易模块、测试模块、日志模块等。以日志模块举例，根据 OOP 的思想，我可以建立一个日志类，然后在每一个需要记录日志的类中初始化日志类，达到日志记录的目的。然而这多个被初始化的日志类增加了系统的开销。如果采用 AOP 的思想，可以有一个日志类，然后使用代理的方式将这个日志类切入到需要记录日志的类中。这样做，就可以降低系统的开销，并且在代码组织的层面也显得较易维护。
+　　通过一个多月的 Spring AOP 的学习，掌握了 Spring AOP 的基本概念。AOP 是面向切面的编程（Aspect-Oriented Programming），是基于 OOP（面向对象的编程，Object-Oriented Programming）开发的一套程序架构。<br/>
+　　个人粗浅的认为，在企业级的软件架构中，有许多分布式的软件架构。这就要求一段通用性的事务使用在软件中的许多模块。我所能想到的有交易模块、测试模块、日志模块等。以日志模块举例，根据 OOP 的思想，我可以建立一个日志类，然后在每一个需要记录日志的类中初始化日志类，达到日志记录的目的。然而这多个被初始化的日志类增加了系统的开销。如果采用 AOP 的思想，可以有一个日志类，然后使用代理的方式将这个日志类切入到需要记录日志的类中。这样做，就可以降低系统的开销，并且在代码组织的层面也显得较易维护。<br/>
 　　在实践的过程中，使用 Spring AOP 的思想，为 PressSystem 项目加入了日志记录模块。日志采用 MySQL 数据库表进行记录，数据库连接采用 MyBatis。
 
 ## AOP 基本概念
@@ -54,89 +54,88 @@ CGLIB 代理
 
 ## PressSystem 项目中 Spring AOP 需要的组件
 
-> 以下提到的组件，是实现 Spring AOP 的组件最小子集
+> 以下提到的组件，是实现 Spring AOP 的组件最小子集。
 
 - **XuanTiController.java** 
-@Autowired
-private XuanTiService xuanTiService;
-下面有：
-xuanTiService.save(xuanTi);
-xuanTiService.update(xuanTi);
+    	@Autowired
+    	private XuanTiService xuanTiService;
+下面有：<br/>
+xuanTiService.save(xuanTi);<br>
+xuanTiService.update(xuanTi);<br>
 xuanTiService.delete(id, "XuanTi");
-- **XuanTiService.java**
-这个只是 interface
-有如下的接口：
-void save(XuanTi xuanTi);
-boolean update(XuanTi xuanTi);
+- **XuanTiService.java**<br>
+这个只是 interface<br>
+有如下的接口：<br>
+void save(XuanTi xuanTi);<br>
+boolean update(XuanTi xuanTi);<br>
 boolean delete(String id, String table_name);
-- **XuanTiServiceImpl.java**
-实现了 XuanTiService 接口
-有如下实现：
-public void save(XuanTi xuanTi) {...}
-public boolean update(XuanTi xuanTi) {...}
-public boolean delete(String id, String table_name) {...}
-- **LogAspect.java**
-有 @Aspect 标记
-@Autowired
-private LogService logService;
-有多个通知
-每个通知，有不同类型的通知的 @AspectJ 方式的标记，例如 @AfterReturning, @Around
+- **XuanTiServiceImpl.java**<br>
+实现了 XuanTiService 接口<br>
+有如下实现：<br>
+public void save(XuanTi xuanTi) {...}<br>
+public boolean update(XuanTi xuanTi) {...}<br>
+public boolean delete(String id, String table_name) {...}<br>
+- **LogAspect.java**<br>
+有 @Aspect 标记<br>
+		@Autowired
+		private LogService logService;
+有多个通知<br>
+每个通知，有不同类型的通知的 @AspectJ 方式的标记，例如 @AfterReturning, @Around<br>
 每个通知，有 pointcut 配置，即每个通知要切入到哪里
-- **spring-common.xml**
-`<aop:aspectj-autoproxy />`
-注释：如果Spring决定一个bean要被切入，那么Spring就会为这个bean自动生成代理来插入外来的方法，保证通知被执行
-`<bean class="com.tgb.service.impl.XuanTiServiceImpl" />`
-`<bean class="com.tgb.service.impl.BookServiceImpl" />`
-注释：要切入的逻辑对象，这些是连接点
-`<bean id="logAspect" class="com.tgb.utils.LogAspect" />`
-注释：日志 AOP
-`<bean id="LogService" class="com.tgb.service.impl.LogServiceImpl" />`
-注释：日志记录业务逻辑对象
-`<context:annotation-config />`
+- **spring-common.xml**<br>
+`<aop:aspectj-autoproxy />`<br>
+注释：如果Spring决定一个bean要被切入，那么Spring就会为这个bean自动生成代理来插入外来的方法，保证通知被执行<br>
+`<bean class="com.tgb.service.impl.XuanTiServiceImpl" />`<br>
+`<bean class="com.tgb.service.impl.BookServiceImpl" />`<br>
+注释：要切入的逻辑对象，这些是连接点<br>
+`<bean id="logAspect" class="com.tgb.utils.LogAspect" />`<br>
+注释：日志 AOP<br>
+`<bean id="LogService" class="com.tgb.service.impl.LogServiceImpl" />`<br>
+注释：日志记录业务逻辑对象<br>
+`<context:annotation-config />`<br>
 注释：启用注解配置方式，比如说启用了 @Autowired
 
 ## PressSystem 项目中 Spring AOP 的切入机制
 
 1. 总的来说，是 LogAspect 这个 bean 切入了 XuanTiServiceImpl 这个 bean
-2. 在 **spring-common.xml** 配置文件中，声明了 **XuanTiServiceImpl** 和 **LogAspect** 2个 bean
-`<bean class="com.tgb.service.impl.XuanTiServiceImpl" />`
+2. 在 **spring-common.xml** 配置文件中，声明了 **XuanTiServiceImpl** 和 **LogAspect** 2个 bean<br>
+`<bean class="com.tgb.service.impl.XuanTiServiceImpl" />`<br>
 `<bean id="logAspect" class="com.tgb.utils.LogAspect" />`
-3. 在 LogAspect 中，有很多配置，看如下的3行。这些配置指定了**saveLogInsert**,**updateLogInsert** 和 **deleteLogInsert** 这三个通知要切入 **XuanTiServiceImpl**
-有如上所示的3个通知
-每个通知，有不同类型的通知的 @AspectJ 方式的标记，例如 @AfterReturning, @Around
+3. 在 LogAspect 中，有很多配置，看如下的3行。这些配置指定了**saveLogInsert**,**updateLogInsert** 和 **deleteLogInsert** 这三个通知要切入 **XuanTiServiceImpl**<br>
+有如上所示的3个通知<br>
+每个通知，有不同类型的通知的 @AspectJ 方式的标记，例如 @AfterReturning, @Around<br>
 每个通知，有 pointcut 配置，即每个通知要切入到哪里
-4. AOP 的实现方式是通过代理实现的。所以在 **spring-common.xml** 中指定了 autoproxy，为 **XuanTiServiceImpl** 创建代理，如下所示：
-`<aop:aspectj-autoproxy />`
+4. AOP 的实现方式是通过代理实现的。所以在 **spring-common.xml** 中指定了 autoproxy，为 **XuanTiServiceImpl** 创建代理，如下所示：<br>
+`<aop:aspectj-autoproxy />`<br>
 注释：如果Spring决定一个bean要被切入，那么Spring就会为这个 bean 自动生成代理来插入外来的方法，保证通知被执行
-5. 在 XuanTiServiceImpl 中有如下3个方法，这3个方法符合 pointcut 的描述，因此具体地来说，这3个方法就是**切入点**，它们被顺利地切入了
-public void save(XuanTi xuanTi) {...}
-public boolean update(XuanTi xuanTi) {...}
+5. 在 XuanTiServiceImpl 中有如下3个方法，这3个方法符合 pointcut 的描述，因此具体地来说，这3个方法就是**切入点**，它们被顺利地切入了<br>
+public void save(XuanTi xuanTi) {...}<br>
+public boolean update(XuanTi xuanTi) {...}<br>
 public boolean delete(String id, String table_name) {...}
-
 
 ## PressSystem 项目中 Spring AOP 机制的调用过程
 
-> 以下描述，主要涉及2点，可以概括为 @Aspect 和 @Autowired
-> @Aspect 就是“切入机制”，@AfterReturning, @Around, pointcut, `<aop:aspectj-autoproxy />` 等知识点都属于这个知识体系
-> @Autowired 是“自动绑定机制”，@Component 注解，广义的 bean 等知识点属于 @Autowired 的基础知识体系
-> 说明：以上3句话，是作者的粗浅认知
+> 以下描述，主要涉及2点，可以概括为 @Aspect 和 @Autowired<br>
+> @Aspect 就是“切入机制”，@AfterReturning, @Around, pointcut, `<aop:aspectj-autoproxy />` 等知识点都属于这个知识体系<br>
+> @Autowired 是“自动绑定机制”，@Component 注解，广义的 bean 等知识点属于 @Autowired 的基础知识体系<br>
+> 说明：以上3句话，是作者的粗浅认知<br>
 > 题外话：下面所提到的调用过程，是 Spring AOP 相关的过程最小子集
 
 1. XuanTiController 被调用了，具体来说，其中的 xuanTiService.save(xuanTi); 被调用了
 2. 因为在 XuanTiController 有标注为 @Autowired 的 xuanTiService，所以 Application 会去查找 xuanTiService 这个 bean
-3. 至于为什么会去查找 xuanTiService 这个 bean 呢，是因为 **spring-common.xml** 中的配置
-`<context:annotation-config />`
+3. 至于为什么会去查找 xuanTiService 这个 bean 呢，是因为 **spring-common.xml** 中的配置<br>
+`<context:annotation-config />`<br>
 注释：启用注解配置方式，比如说启用了 @Autowired
 4. XuanTiService 只是一个 interface，实现它的是 XuanTiServiceImpl
-5. XuanTiServiceImpl 这个 bean 找到了，因为在 **spring-common.xml** 中有配置
+5. XuanTiServiceImpl 这个 bean 找到了，因为在 **spring-common.xml** 中有配置<br>
 `<bean class="com.tgb.service.impl.XuanTiServiceImpl" />`
 6. xuanTiService.save(xuanTi); 被执行了，具体来说，是 XuanTiServiceImpl 中的  public void save(XuanTi xuanTi) {...} 被执行了
 7. 根据上一章节“切入机制”的描述，在执行 public void save(XuanTi xuanTi) {...} 的时候，会伴随着执行 LogAspect 中的 saveLogInsert 方法
 8. 在 LogAspect 中，有标注为 @Autowired 的 logService，所以 Application 会去查找 logService 这个 bean
 9. 查找的原因，就是第3点所描述的
 10. LogService 只是一个 interface，实现它的是 LogServiceImpl
-11. XuanTiServiceImpl 这个 bean 找到了，因为在 **spring-common.xml** 中有配置
-`<bean id="LogService" class="com.tgb.service.impl.LogServiceImpl" />`
+11. XuanTiServiceImpl 这个 bean 找到了，因为在 **spring-common.xml** 中有配置<br>
+`<bean id="LogService" class="com.tgb.service.impl.LogServiceImpl" />`<br>
 注释：日志记录业务逻辑对象
 12. logService.log(log); 被执行了，具体来说，是 LogServiceImpl 中的 public void log(Log log) {...} 被执行了
 
