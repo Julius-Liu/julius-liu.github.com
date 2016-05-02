@@ -52,37 +52,46 @@ CGLIB 代理
 - **Around advice** : Advice that surrounds a join point such as a method invocation. This is the most powerful kind of advice. Around advice can perform custom behavior before and after the method invocation. It is also responsible for choosing whether to proceed to the join point or to shortcut the advised method execution by returning its own return value or throwing an exception.
 - **Julius：环绕通知**：环绕通知是包围住连接点的通知，可以在连接点的前面或后面执行自定义的方法。环绕通知可以决定是否执行连接点的方法，或者绕过连接点的方法。绕过的方式是返回环绕通知自己的值或者抛出一个异常。
 
-## PressSystem 项目中 Spring AOP 需要的组件
+## PressSystem 项目中 Spring AOP 的基本组件
 
 > 以下提到的组件，是实现 Spring AOP 的组件最小子集。
 
-- **XuanTiController.java** 
-    	@Autowired
-    	private XuanTiService xuanTiService;
+- **XuanTiController.java**<br>
+调用了切入点的方法<br>
+`@Autowired`<br>
+`private XuanTiService xuanTiService;`<br>
 下面有：<br/>
 xuanTiService.save(xuanTi);<br>
 xuanTiService.update(xuanTi);<br>
 xuanTiService.delete(id, "XuanTi");
+
 - **XuanTiService.java**<br>
-这个只是 interface<br>
+切入点的接口<br>
+这个只是 interface <br>
 有如下的接口：<br>
 void save(XuanTi xuanTi);<br>
 boolean update(XuanTi xuanTi);<br>
-boolean delete(String id, String table_name);
+boolean delete(String id, String table_name);<br>
+
 - **XuanTiServiceImpl.java**<br>
+切入点的具体实现<br>
 实现了 XuanTiService 接口<br>
 有如下实现：<br>
 public void save(XuanTi xuanTi) {...}<br>
 public boolean update(XuanTi xuanTi) {...}<br>
-public boolean delete(String id, String table_name) {...}<br>
+public boolean delete(String id, String table_name) {...}
+
 - **LogAspect.java**<br>
+切面和通知 <br>
 有 @Aspect 标记<br>
-		@Autowired
-		private LogService logService;
+`@Autowired`<br>
+`private LogService logService;`<br>
 有多个通知<br>
 每个通知，有不同类型的通知的 @AspectJ 方式的标记，例如 @AfterReturning, @Around<br>
 每个通知，有 pointcut 配置，即每个通知要切入到哪里
+
 - **spring-common.xml**<br>
+对切入点和切面的配置文件 <br>
 `<aop:aspectj-autoproxy />`<br>
 注释：如果Spring决定一个bean要被切入，那么Spring就会为这个bean自动生成代理来插入外来的方法，保证通知被执行<br>
 `<bean class="com.tgb.service.impl.XuanTiServiceImpl" />`<br>
@@ -101,9 +110,9 @@ public boolean delete(String id, String table_name) {...}<br>
 2. 在 **spring-common.xml** 配置文件中，声明了 **XuanTiServiceImpl** 和 **LogAspect** 2个 bean<br>
 `<bean class="com.tgb.service.impl.XuanTiServiceImpl" />`<br>
 `<bean id="logAspect" class="com.tgb.utils.LogAspect" />`
-3. 在 LogAspect 中，有很多配置，看如下的3行。这些配置指定了**saveLogInsert**,**updateLogInsert** 和 **deleteLogInsert** 这三个通知要切入 **XuanTiServiceImpl**<br>
-有如上所示的3个通知<br>
-每个通知，有不同类型的通知的 @AspectJ 方式的标记，例如 @AfterReturning, @Around<br>
+3. 在 LogAspect 中，有很多配置，看如下的3行。这些配置指定了**saveLogInsert**,**updateLogInsert** 和 **deleteLogInsert** 这三个通知要切入 **XuanTiServiceImpl** <br>
+`@AfterReturning(pointcut="execution(* com.tgb.service.impl.*.save(..))", argNames="returnValue", returning="returnValue")`<br>
+注意，每个通知，有不同类型的通知的 @AspectJ 方式的标记，例如 @AfterReturning, @Around<br>
 每个通知，有 pointcut 配置，即每个通知要切入到哪里
 4. AOP 的实现方式是通过代理实现的。所以在 **spring-common.xml** 中指定了 autoproxy，为 **XuanTiServiceImpl** 创建代理，如下所示：<br>
 `<aop:aspectj-autoproxy />`<br>
