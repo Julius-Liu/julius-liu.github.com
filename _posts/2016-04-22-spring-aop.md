@@ -16,25 +16,40 @@ description: Spring AOP 知识整理
 　　为了加深理解，摘录 Spring 官方文档 Aspect Oriented Programming with Spring 的原文。每一个概念之后再加上自己的理解。
 
 - **Aspect** : a modularization of a concern that cuts across multiple classes. Transaction management is a good example of a crosscutting concern in enterprise Java applications. In Spring AOP, aspects are implemented using regular classes (the schema-based approach) or regular classes annotated with the @Aspect annotation (the @AspectJ style).
-- **Julius: Aspect（切面）**：一种切入多个类的模块化机制。Spring AOP 中，aspect 有两种实现方式：
-使用常规的类，然后使用 基于 XML Schema 方式
-使用常规的类，然后加上 @Aspect 注解，也就是 @AspectJ 方式
+
+- **Julius: Aspect（切面）**：一种切入多个类的模块化机制。Spring AOP 中，aspect 有两种实现方式：<br>
+使用常规的类，然后使用 基于 XML Schema 方式<br>
+使用常规的类，然后加上 @Aspect 注解，也就是 @AspectJ 方式<br>
+
 - **Join point** : a point during the execution of a program, such as the execution of a method or the handling of an exception. In Spring AOP, a join point always represents a method execution.
+
 - **Julius：JoinPoint（连接点）**：可以理解为一个方法，就是切面要切入的那个方法。
+
 - **Advice** : action taken by an aspect at a particular join point. Different types of advice include "around," "before" and "after" advice. (Advice types are discussed below.) Many AOP frameworks, including Spring, model an advice as an interceptor, maintaining a chain of interceptors around the join point.
+
 - **Julius：Advice（通知）**：通知就是切面中的方法，这个方法将从JoinPoint切入。
+
 - **Pointcut** : a predicate that matches join points. Advice is associated with a pointcut expression and runs at any join point matched by the pointcut (for example, the execution of a method with a certain name). The concept of join points as matched by pointcut expressions is central to AOP, and Spring uses the AspectJ pointcut expression language by default.
+
 - **Julius：Pointcut（切点）**：切点就是表达式，通知将会切入符合切点表达式的JoinPoint 中。
+
 - **Introduction** : declaring additional methods or fields on behalf of a type. Spring AOP allows you to introduce new interfaces (and a corresponding implementation) to any advised object. For example, you could use an introduction to make a bean implement an IsModified interface, to simplify caching. (An introduction is known as an inter-type declaration in the AspectJ community.)
-- **Julius：Introduction（引入）**：引入机制可以向一个能被切入的对象发明新的接口，并实现它。
-**Julius**：其实就是把能被切入的对象强制转换成另一个类，这样就可以执行另一个类的方法了。
+
+- **Julius：Introduction（引入）**：引入机制可以向一个能被切入的对象发明新的接口，并实现它。<br>
+**Julius**：其实就是把能被切入的对象强制转换成另一个类，这样就可以执行另一个类的方法了。<br>
+
 - **Target object** : object being advised by one or more aspects. Also referred to as the advised object. Since Spring AOP is implemented using runtime proxies, this object will always be a proxied object.
+
 - **Julius：Target Object（目标对象）**：就是能被切入的对象。Spring AOP 中，目标对象永远是可被代理的对象。
+
 - **AOP proxy** : an object created by the AOP framework in order to implement the aspect contracts (advise method executions and so on). In the Spring Framework, an AOP proxy will be a JDK dynamic proxy or a CGLIB proxy.
-- **Julius：AOP Proxy（AOP 代理）**：AOP Proxy 就是 通过 AOP 框架生成出来的一个对象，这个对象实现了切面的功能，是目标类被切入以后的结果。Spring AOP 代理分两种：
-JDK 动态代理
-CGLIB 代理
+
+- **Julius：AOP Proxy（AOP 代理）**：AOP Proxy 就是 通过 AOP 框架生成出来的一个对象，这个对象实现了切面的功能，是目标类被切入以后的结果。Spring AOP 代理分两种：<br>
+JDK 动态代理<br>
+CGLIB 代理<br>
+
 - **Weaving** : linking aspects with other application types or objects to create an advised object. This can be done at compile time (using the AspectJ compiler, for example), load time, or at runtime. Spring AOP, like other pure Java AOP frameworks, performs weaving at runtime.
+
 - **Julius：Weaving（织入）**：织入就是把切面与目标类连接的过程。过程的产物就是一个被切入的目标。
 
 ## 通知的类型
@@ -42,14 +57,23 @@ CGLIB 代理
 　　简单地来说，通知可以有前置通知、后置通知、环绕通知等等。比如，前置通知就是通知在切入点执行之前执行；后置通知就是在切入点执行之后执行。在我的 Spring AOP 示例程序中，列举了以下几个通知的实现方式。
 
 - **Before advice** : Advice that executes before a join point, but which does not have the ability to prevent execution flow proceeding to the join point (unless it throws an exception).
+
 - **Julius：前置通知**：在连接点之前执行。除非是前置通知抛出了异常，否则前置通知没有能力影响执行流流向连接点。
+
 - **After returning advice** : Advice to be executed after a join point completes normally: for example, if a method returns without throwing an exception.
+
 - **Julius：返回后通知**：在连接点的方法正常执行完之后再执行的通知。所谓的正常执行完，比如说连接点方法没有抛出异常。
+
 - **After throwing advice** : Advice to be executed if a method exits by throwing an exception.
+
 - **Julius：抛出后通知**：如果方法因为抛出了异常而终止，那么就执行抛出后通知。
+
 - **After (finally) advice** : Advice to be executed regardless of the means by which a join point exits (normal or exceptional return).
+
 - **Julius：后置通知**：不管连接点方法的退出情况如何，是正常还是有异常，后置通知都会执行。
+
 - **Around advice** : Advice that surrounds a join point such as a method invocation. This is the most powerful kind of advice. Around advice can perform custom behavior before and after the method invocation. It is also responsible for choosing whether to proceed to the join point or to shortcut the advised method execution by returning its own return value or throwing an exception.
+
 - **Julius：环绕通知**：环绕通知是包围住连接点的通知，可以在连接点的前面或后面执行自定义的方法。环绕通知可以决定是否执行连接点的方法，或者绕过连接点的方法。绕过的方式是返回环绕通知自己的值或者抛出一个异常。
 
 ## PressSystem 项目中 Spring AOP 的基本组件
@@ -57,70 +81,47 @@ CGLIB 代理
 > 以下提到的组件，是实现 Spring AOP 的组件最小子集。
 
 - **XuanTiController.java**<br>
-调用了切入点的方法<br>
-`@Autowired`<br>
-`private XuanTiService xuanTiService;`<br>
-下面有：<br/>
-xuanTiService.save(xuanTi);<br>
-xuanTiService.update(xuanTi);<br>
-xuanTiService.delete(id, "XuanTi");
+　　在 PressSystem 项目中，用户操作的是 jsp 页面，jsp 页面会发送一个异步请求给 XuanTiController，在 XuanTiController 中，会调用切入点的方法。所以可以把 XuanTiController 看作入口。
 
 - **XuanTiService.java**<br>
-切入点的接口<br>
-这个只是 interface <br>
-有如下的接口：<br>
-void save(XuanTi xuanTi);<br>
-boolean update(XuanTi xuanTi);<br>
-boolean delete(String id, String table_name);<br>
+　　采用接口与实现分离的设计原则，XuanTiService 就是接口，它的实现是 XuanTiServiceImpl，XuanTiServiceImpl 就是切入点。
 
 - **XuanTiServiceImpl.java**<br>
-切入点的具体实现<br>
-实现了 XuanTiService 接口<br>
-有如下实现：<br>
-public void save(XuanTi xuanTi) {...}<br>
-public boolean update(XuanTi xuanTi) {...}<br>
-public boolean delete(String id, String table_name) {...}
+　　XuanTiServiceImpl 就是切入点，其中的函数被通知切入了。
 
 - **LogAspect.java**<br>
-切面和通知 <br>
-有 @Aspect 标记<br>
-`@Autowired`<br>
-`private LogService logService;`<br>
-有多个通知<br>
-每个通知，有不同类型的通知的 @AspectJ 方式的标记，例如 @AfterReturning, @Around<br>
-每个通知，有 pointcut 配置，即每个通知要切入到哪里
+　　LogAspect 就是切面，其中有一些通知，这些通知将会切入到切入点中。
 
 - **spring-common.xml**<br>
-对切入点和切面的配置文件 <br>
-`<aop:aspectj-autoproxy />`<br>
-注释：如果Spring决定一个bean要被切入，那么Spring就会为这个bean自动生成代理来插入外来的方法，保证通知被执行<br>
-`<bean class="com.tgb.service.impl.XuanTiServiceImpl" />`<br>
-`<bean class="com.tgb.service.impl.BookServiceImpl" />`<br>
-注释：要切入的逻辑对象，这些是连接点<br>
-`<bean id="logAspect" class="com.tgb.utils.LogAspect" />`<br>
-注释：日志 AOP<br>
-`<bean id="LogService" class="com.tgb.service.impl.LogServiceImpl" />`<br>
-注释：日志记录业务逻辑对象<br>
-`<context:annotation-config />`<br>
-注释：启用注解配置方式，比如说启用了 @Autowired
+　　这是切入点和切面的配置文件。
 
 ## PressSystem 项目中 Spring AOP 的切入机制
 
 1. 总的来说，是 LogAspect 这个 bean 切入了 XuanTiServiceImpl 这个 bean
+
 2. 在 **spring-common.xml** 配置文件中，声明了 **XuanTiServiceImpl** 和 **LogAspect** 2个 bean<br>
 `<bean class="com.tgb.service.impl.XuanTiServiceImpl" />`<br>
 `<bean id="logAspect" class="com.tgb.utils.LogAspect" />`
-3. 在 LogAspect 中，有很多配置，看如下的3行。这些配置指定了**saveLogInsert**,**updateLogInsert** 和 **deleteLogInsert** 这三个通知要切入 **XuanTiServiceImpl** <br>
-`@AfterReturning(pointcut="execution(* com.tgb.service.impl.*.save(..))", argNames="returnValue", returning="returnValue")`<br>
-注意，每个通知，有不同类型的通知的 @AspectJ 方式的标记，例如 @AfterReturning, @Around<br>
-每个通知，有 pointcut 配置，即每个通知要切入到哪里
+
+3. 在 LogAspect 中，有很多配置，看如下的3行。这些配置指定了<br>
+**saveLogInsert**<br>
+**updateLogInsert**<br>
+**deleteLogInsert**<br>
+这三个通知要切入 **XuanTiServiceImpl** <br>
+`@AfterReturning(pointcut="execution(* com.tgb.service.impl.*.save(..))", argNames="returnValue", returning="returnValue")` <br>
+`@AfterReturning(pointcut="execution(* com.tgb.service.impl.*.update(..))", argNames="returnValue", returning="returnValue")` <br>
+`@Around("execution(* com.tgb.service.impl.*.delete(..)) && args(id, table_name)")` <br>
+注意，每个通知，有不同类型的通知的 @AspectJ 方式的标记，例如 @AfterReturning, @Around <br>
+另外，每个通知，可以有 pointcut 配置，即每个通知要切入到哪里
+
 4. AOP 的实现方式是通过代理实现的。所以在 **spring-common.xml** 中指定了 autoproxy，为 **XuanTiServiceImpl** 创建代理，如下所示：<br>
 `<aop:aspectj-autoproxy />`<br>
 注释：如果Spring决定一个bean要被切入，那么Spring就会为这个 bean 自动生成代理来插入外来的方法，保证通知被执行
-5. 在 XuanTiServiceImpl 中有如下3个方法，这3个方法符合 pointcut 的描述，因此具体地来说，这3个方法就是**切入点**，它们被顺利地切入了<br>
-public void save(XuanTi xuanTi) {...}<br>
-public boolean update(XuanTi xuanTi) {...}<br>
-public boolean delete(String id, String table_name) {...}
+
+5. 在 XuanTiServiceImpl 中有如下3个方法，这3个方法符合 pointcut 的描述，因此具体地来说，这3个方法就是**切入点**，它们被顺利地切入了 <br>
+`public void save(XuanTi xuanTi) {...}` <br>
+`public boolean update(XuanTi xuanTi) {...}` <br>
+`public boolean delete(String id, String table_name) {...}`
 
 ## PressSystem 项目中 Spring AOP 机制的调用过程
 
@@ -130,47 +131,66 @@ public boolean delete(String id, String table_name) {...}
 > 说明：以上3句话，是作者的粗浅认知<br>
 > 题外话：下面所提到的调用过程，是 Spring AOP 相关的过程最小子集
 
-1. XuanTiController 被调用了，具体来说，其中的 xuanTiService.save(xuanTi); 被调用了
+1. XuanTiController 被调用了，具体来说，其中的 `xuanTiService.save(xuanTi);` 被调用了
+
 2. 因为在 XuanTiController 有标注为 @Autowired 的 xuanTiService，所以 Application 会去查找 xuanTiService 这个 bean
-3. 至于为什么会去查找 xuanTiService 这个 bean 呢，是因为 **spring-common.xml** 中的配置<br>
+
+3. 至于为什么会去查找 xuanTiService 这个 bean 呢，是因为 **spring-common.xml** 中的配置 <br>
 `<context:annotation-config />`<br>
 注释：启用注解配置方式，比如说启用了 @Autowired
+
 4. XuanTiService 只是一个 interface，实现它的是 XuanTiServiceImpl
-5. XuanTiServiceImpl 这个 bean 找到了，因为在 **spring-common.xml** 中有配置<br>
+
+5. XuanTiServiceImpl 这个 bean 找到了，因为在 **spring-common.xml** 中有配置 <br>
 `<bean class="com.tgb.service.impl.XuanTiServiceImpl" />`
+
 6. xuanTiService.save(xuanTi); 被执行了，具体来说，是 XuanTiServiceImpl 中的  public void save(XuanTi xuanTi) {...} 被执行了
-7. 根据上一章节“切入机制”的描述，在执行 public void save(XuanTi xuanTi) {...} 的时候，会伴随着执行 LogAspect 中的 saveLogInsert 方法
+
+7. 根据上一章节“切入机制”的描述，在执行 `public void save(XuanTi xuanTi) {...}` 的时候，会伴随着执行 LogAspect 中的 saveLogInsert 方法
+
 8. 在 LogAspect 中，有标注为 @Autowired 的 logService，所以 Application 会去查找 logService 这个 bean
+
 9. 查找的原因，就是第3点所描述的
+
 10. LogService 只是一个 interface，实现它的是 LogServiceImpl
-11. XuanTiServiceImpl 这个 bean 找到了，因为在 **spring-common.xml** 中有配置<br>
-`<bean id="LogService" class="com.tgb.service.impl.LogServiceImpl" />`<br>
+
+11. XuanTiServiceImpl 这个 bean 找到了，因为在 **spring-common.xml** 中有配置 <br>
+`<bean id="LogService" class="com.tgb.service.impl.LogServiceImpl" />` <br>
 注释：日志记录业务逻辑对象
+
 12. logService.log(log); 被执行了，具体来说，是 LogServiceImpl 中的 public void log(Log log) {...} 被执行了
 
+## 知识拓展
 
+　　在本章节，我将会介绍另外一些 Spring AOP Docs 中提到的基础知识。这些基础知识没有使用在 PressSystem 项目中，但是作为基础知识，应当有所了解。
 
-AOP Proxies 简单介绍
+### 五种类型的通知
 
-`<aop:aspectj-autoproxy />`
-
-声明一个 Aspect, Pointcut
-
-声明通知的方法：
-分五种不同的通知类型进行举例
+　　在前面的章节中，提到过五种类型的通知。这五种类型的通知，在我的 aop_demo 示例程序中都有使用。注意，声明通知的方法有以下两种方式：
 
 - @Aspectj
 - Schema-based
 
-Advice Parameters
+　　在我的示例程序中，都有展示。
 
-Introductions 简单介绍
+### 通知的参数
 
-- @Aspectj
-- Schema-based
+　　声明一个通知的时候，是可以传入切入点的参数，在通知中使用这个参数的，例如上文中提到的 delete 通知：<br>
+　　`@Around("execution(* com.tgb.service.impl.*.delete(..)) && args(id, table_name)")` <br>
+　　当我传入了 (id, table_name) 参数后，可以在通知中使用 id 和 table_name。delete 通知的目的是，当 delete 方法执行的时候，写下日志。在日志中我要知道删除的 id 和 table_name。传入了这两个参数之后，就可以记录了。<br>
+　　通知的参数可以很复杂，用于满足实际需要。想要了解更多通知参数的使用方法，可以查看 Spring AOP Docs。
 
-编程式创建 @Aspectj Proxy
+### AOP Proxy 原理简介
 
+　　这里是 AOP Proxy 原理简介。
+
+### Introductions 简单介绍
+
+Introductions (known as inter-type declarations in AspectJ) enable an aspect to declare that advised objects implement a given interface, and to provide an implementation of that interface on behalf of those objects.
+
+### 编程式创建 @Aspectj Proxy
+
+　　这里是正文。
 
 ## 小结
 
@@ -186,4 +206,4 @@ Introductions 简单介绍
 
 <br/>
 
-<div align="right">4/25/2016 5:26:58 PM </div>
+<div align="right">5/4/2016 5:23:30 PM </div>
