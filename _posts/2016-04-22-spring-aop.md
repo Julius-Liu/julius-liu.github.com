@@ -177,8 +177,12 @@ CGLIB 代理<br>
 
 　　声明一个通知的时候，是可以传入切入点的参数，在通知中使用这个参数的，例如上文中提到的 delete 通知：<br>
 　　`@Around("execution(* com.tgb.service.impl.*.delete(..)) && args(id, table_name)")` <br>
-　　当我传入了 (id, table_name) 参数后，可以在通知中使用 id 和 table_name。delete 通知的目的是，当 delete 方法执行的时候，写下日志。在日志中我要知道删除的 id 和 table_name。传入了这两个参数之后，就可以记录了。<br>
+　　当我传入了 `(id, table_name)` 参数后，可以在通知中使用 id 和 table_name。delete 通知的目的是，当 delete 方法执行的时候，写下日志。在日志中我要知道删除的 id 和 table_name。传入了这两个参数之后，就可以记录了。<br>
 　　通知的参数可以很复杂，用于满足实际需要。想要了解更多通知参数的使用方法，可以查看 Spring AOP Docs。
+
+### Pointcut
+
+　　`Pointcut` 是 `Advice` 的具体配置，指定了一个 Advice 将以什么规则切入到切入点中。Pointcut 是一种十分重要的机制，在 PressSystem 的 LogAspect 中有什么简单的使用。想要知道更多使用方法，可以参考 Spring AOP Docs。
 
 ### AOP Proxy 原理简介
 
