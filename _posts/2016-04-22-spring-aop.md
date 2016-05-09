@@ -137,7 +137,7 @@ CGLIB 代理<br>
 
 3. 至于为什么会去查找 xuanTiService 这个 bean 呢，是因为 **spring-common.xml** 中的配置 <br>
 `<context:annotation-config />`<br>
-注释：启用注解配置方式，比如说启用了 @Autowired
+注释：启用注解配置方式，比如说启用了 @Autowired 的识别。
 
 4. XuanTiService 只是一个 interface，实现它的是 XuanTiServiceImpl
 
@@ -162,7 +162,7 @@ CGLIB 代理<br>
 
 ## 知识拓展
 
-　　在本章节，我将会介绍另外一些 Spring AOP Docs 中提到的基础知识。这些基础知识没有使用在 PressSystem 项目中，但是作为基础知识，应当有所了解。
+　　在本章节，我将会介绍另外一些 Spring AOP Docs 中提到的基础知识。这些基础知识没有使用在 PressSystem 项目中，但是作为 Spring AOP Docs 中的基础知识，应当有所了解。
 
 ### 五种类型的通知
 
@@ -180,9 +180,9 @@ CGLIB 代理<br>
 　　当我传入了 `(id, table_name)` 参数后，可以在通知中使用 id 和 table_name。delete 通知的目的是，当 delete 方法执行的时候，写下日志。在日志中我要知道删除的 id 和 table_name。传入了这两个参数之后，就可以记录了。<br>
 　　通知的参数可以很复杂，用于满足实际需要。想要了解更多通知参数的使用方法，可以查看 Spring AOP Docs。
 
-### Pointcut
+### Pointcut - 切点
 
-　　`Pointcut` 是 `Advice` 的具体配置，指定了一个 Advice 将以什么规则切入到切入点中。Pointcut 是一种十分重要的机制，在 PressSystem 的 LogAspect 中有什么简单的使用。想要知道更多使用方法，可以参考 Spring AOP Docs。
+　　`Pointcut` 是 `Advice` 的具体配置，指定了一个 Advice 将会切入到哪些切入点中，这是由切点表达式决定的。Pointcut 是一种十分重要的机制，在 PressSystem 的 LogAspect 中有简单的应用。想要知道更多使用方法，可以参考 Spring AOP Docs。
 
 ### AOP Proxy 原理简介
 
