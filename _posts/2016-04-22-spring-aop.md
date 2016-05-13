@@ -3,7 +3,7 @@ layout: post
 title: Spring AOP 知识整理
 subtitle: 
 categories: blog
-tags: [JavaEE]
+tags: [JavaEE, Spring]
 description: Spring AOP 知识整理
 ---
 
@@ -184,13 +184,22 @@ CGLIB 代理<br>
 
 　　`Pointcut` 是 `Advice` 的具体配置，指定了一个 Advice 将会切入到哪些切入点中，这是由切点表达式决定的。Pointcut 是一种十分重要的机制，在 PressSystem 的 LogAspect 中有简单的应用。想要知道更多使用方法，可以参考 Spring AOP Docs。
 
-### AOP Proxy 原理简介
-
-　　这里是 AOP Proxy 原理简介。
-
 ### Introductions 简单介绍
 
-Introductions (known as inter-type declarations in AspectJ) enable an aspect to declare that advised objects implement a given interface, and to provide an implementation of that interface on behalf of those objects.
+　　以下是 Spring AOP Docs 中的原版描述：<br>
+　　Introductions (known as inter-type declarations in AspectJ) enable an aspect to declare that advised objects implement a given interface, and to provide an implementation of that interface on behalf of those objects.<br>
+　　相关的代码，可以参看 com.spring.demo08 和 com.spring demo14。其中：
+
+- com.spring.demo08 是 Schema 方式实现的
+- com.spring.demo14 是 @AspectJ 方式实现的
+
+　　根据我的理解，Introduction 的意义就是接口类型强转，但是看到一句注释说，这是**“接口动态实现”**，觉得里面还有其他的花头我没有理解。。。
+
+### AOP Proxy 原理简介
+
+　　Spring 的动态代理有两种：一是 JDK 的动态代理；另一个是 cglib 动态代理（通过修改字节码来实现代理）。可以以 JDK 动态代理的方式为例，来粗浅地探知 AOP Proxy 的究竟。<br>
+　　JDK的代理方式主要就是通过反射跟动态编译来实现的，主要涉及到java.lang.reflect包中的两个类：`Proxy` 和 `InvocationHandler`。其中 `InvocationHandler` 是一个接口，可以通过实现该接口定义横切逻辑，在并通过反射机制调用目标类的代码，动态将横切逻辑和业务逻辑编织在一起。
+　　将会在另一篇文章中，重点来谈一下 Spring AOP 的底层实现技术：JDK 动态代理。
 
 ### 编程式创建 @Aspectj Proxy
 
@@ -210,4 +219,4 @@ Introductions (known as inter-type declarations in AspectJ) enable an aspect to 
 
 <br/>
 
-<div align="right">5/4/2016 5:23:30 PM </div>
+<div align="right">`5/4/2016 5:23:30 PM` </div>
