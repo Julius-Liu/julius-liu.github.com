@@ -164,7 +164,7 @@ CGLIB 代理<br>
 
 　　在本章节，我将会介绍另外一些 Spring AOP Docs 中提到的基础知识。这些基础知识没有使用在 PressSystem 项目中，但是作为 Spring AOP Docs 中的基础知识，应当有所了解。
 
-### 五种类型的通知
+### 五种类型的通知的实现方式
 
 　　在前面的章节中，提到过五种类型的通知。这五种类型的通知，在我的 aop_demo 示例程序中都有使用。注意，声明通知的方法有以下两种方式：
 
@@ -173,14 +173,14 @@ CGLIB 代理<br>
 
 　　在我的示例程序中，都有展示。
 
-### 通知的参数
+### 通知参数的使用方法
 
 　　声明一个通知的时候，是可以传入切入点的参数，在通知中使用这个参数的，例如上文中提到的 delete 通知：<br>
 　　`@Around("execution(* com.tgb.service.impl.*.delete(..)) && args(id, table_name)")` <br>
 　　当我传入了 `(id, table_name)` 参数后，可以在通知中使用 id 和 table_name。delete 通知的目的是，当 delete 方法执行的时候，写下日志。在日志中我要知道删除的 id 和 table_name。传入了这两个参数之后，就可以记录了。<br>
 　　通知的参数可以很复杂，用于满足实际需要。想要了解更多通知参数的使用方法，可以查看 Spring AOP Docs。
 
-### Pointcut - 切点
+### Pointcut - 切点表达式的使用
 
 　　`Pointcut` 是 `Advice` 的具体配置，指定了一个 Advice 将会切入到哪些切入点中，这是由切点表达式决定的。Pointcut 是一种十分重要的机制，在 PressSystem 的 LogAspect 中有简单的应用。想要知道更多使用方法，可以参考 Spring AOP Docs。
 
@@ -201,22 +201,22 @@ CGLIB 代理<br>
 　　JDK的代理方式主要就是通过反射跟动态编译来实现的，主要涉及到java.lang.reflect包中的两个类：`Proxy` 和 `InvocationHandler`。其中 `InvocationHandler` 是一个接口，可以通过实现该接口定义横切逻辑，在并通过反射机制调用目标类的代码，动态将横切逻辑和业务逻辑编织在一起。
 　　将会在另一篇文章中，重点来谈一下 Spring AOP 的底层实现技术：JDK 动态代理。
 
-### 编程式创建 @Aspectj Proxy
-
-　　这里是正文。
-
 ## 小结
 
-　　这里是小结
-
-## 附录：这里是附录
-
-　　这里是附录
+　　这篇博客写了很久，一方面是由于差不多是利用业余时间在学习，另一方面是由于 Spring AOP 的知识点有很多。<br>
+　　在面向切面的编程的概念中，比较重要的是切面类和目标类。切面类中有切面方法，目标类中有切入点。通过正确的配置，可以使切面方法切入到目标类的切面点中。<br>
+　　这篇博客首先介绍了 AOP 的概念，然后介绍了通知的5种类型。接下来，以 PressSystem 为例，讲述了 PressSystem 中的 AOP 的基本组件，切入机制和调用过程。<br>
+　　最后，在知识拓展中，十分简单地提到了五种类型的通知的实现方式，通知参数的使用方法，Pointcut - 切点表达式的使用，Introductions 简单介绍。最重要的一点，我认为是 AOP Proxy 原理简介。有关 AOP Proxy 原理简介，请参看另一篇博客：Spring AOP 中的 JDK 动态代理。
 
 ## 参考资料
 
-　　这里是参考资料
+1. [10. Aspect Oriented Programming with Spring](http://docs.spring.io/spring-framework/docs/current/spring-framework-reference/html/aop.html#aop-schema-advice-before) （这是总纲，可以作为知识点的引入）
+1. [AOP 那点事儿](http://my.oschina.net/huangyong/blog/161338?fromerr=P1lV8UQl) （这篇文章写得并不好，太随性，思路不清楚）
+1. [Spring AOP Example Tutorial – Aspect, Advice, Pointcut, JoinPoint, Annotations, XML Configuration](http://www.journaldev.com/2583/spring-aop-example-tutorial-aspect-advice-pointcut-joinpoint-annotations-xml-configuration) （Spring AOP demo）
+2. [Spring AOP 完成日志记录](http://hotstrong.iteye.com/blog/1330046) （PressSystem 的日志功能实现，参考了这篇文章）
+3. [Spring 容器AOP的实现原理——动态代理](http://wiki.jikexueyuan.com/project/ssh-noob-learning/dynamic-proxy.html) （Spring AOP 动态代理的学习）
+4. [Spring AOP的底层实现技术---JDK动态代理 ](http://blog.csdn.net/arthur0088/article/details/5377736) （Spring AOP 动态代理的学习）
 
 <br/>
 
-<div align="right">`5/4/2016 5:23:30 PM` </div>
+<div align="right">`2016-05-14 星期六 6:32:24 PM`</div>
