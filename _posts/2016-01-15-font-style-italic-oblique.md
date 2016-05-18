@@ -2,7 +2,7 @@
 layout: post
 title: CSS 中 font-style 的 italic 和 oblique 的区别
 categories: blog
-tags: [冷知识, 前端开发]
+tags: [前端开发]
 description: CSS 中 font-style 的 italic 和 oblique 的区别
 ---
 

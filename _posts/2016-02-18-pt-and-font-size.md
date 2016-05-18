@@ -2,7 +2,7 @@
 layout: post
 title: 磅值和中文字号的对应表
 categories: blog
-tags: [未命名]
+tags: [杂项]
 description: 磅值和中文字号的对应表
 ---
 
