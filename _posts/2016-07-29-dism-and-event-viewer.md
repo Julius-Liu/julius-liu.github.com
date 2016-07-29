@@ -6,7 +6,7 @@ tags: [职场]
 description: 如何获取比 dism.log 更详细的日志
 ---
 
-##正文##
+## 正文 ##
 
 　　在工作中，曾经遇到过一个问题。<br/>
 <br/>
@@ -16,6 +16,7 @@ description: 如何获取比 dism.log 更详细的日志
 　　在 All Apps 里面点击 Oxford，发现应用的图标下面出现了类似进度条的物件，Oxford 词典无论如何都无法启动。问题出现了：Oxford Dictionary 无法安装！<br/>
 　　但是，`dism /online /Add-ProvisionedAppxPackage` 不是显示 “操作成功完成” 了吗？于是，试图从 dism 的 log 中寻找原因。<br/>
 　　dism.log 的路径是 `C:\Windows\Logs\DISM\dism.log`。打开这个日志后，发现所有的命令的执行结果都是 `Info` 或者 `Warning` 类型，没有 `Error`；而且 dism.log 也显示 `Add-ProvisionedAppxPackage` 命令成功完成。这条路被堵死了。<br/>
+<br/>
 　　休息一下以后，回来再次思考这个问题。可以确定的是，Oxford Dictionary 一定没有安装成功，因为如果安装成功，那么一定可以启动这个应用。但是 dism.log 显示命令的执行是成功的。于是 debug 的思路是：**能否找到比 dism.log 更详细的安装日志？**<br/>
 　　于是我请教了某一位同事，在他的帮助下，成功解决了这一问题！以下是解决步骤。<br/>
 <br/>
@@ -36,21 +37,19 @@ description: 如何获取比 dism.log 更详细的日志
   <p><img src="/images/event-viewer/03_Oxford_error.png" align="center"></p>
 </center>
 <br/>
-　　**出错原因分析**：其实出错原因很简单，在安装 Oxford Dictionary 时，需要指定 `DependencyPackagePath`。如果没有指定，而且目标机器上没有依赖的库文件的话，安装就会失败。这也解释了为什么在某些 Win10 机器上可以安装，而某些机器不可以。
+　　**出错原因分析**：其实出错原因很简单，在安装 Oxford Dictionary 时，需要指定 `DependencyPackagePath`。如果没有指定，而且目标机器上没有依赖的库文件的话，安装就会失败。这也解释了为什么在某些 Win10 机器上可以安装，而某些机器不可以。<br/>
 　　完整的 Oxford Dictionary 安装命令，如下所示：
 
 	dism.exe /online /Add-ProvisionedAppxPackage /PackagePath:"c:\OxfordUniversityPressh.4488779F26797_2016.219.1640.5897_neutral_~_nttgmz6jfxeb6.appxbundle" /DependencyPackagePath:"c:\Microsoft.VCLibs.120.00_12.0.21005.1_x86__8wekyb3d8bbwe.appx" /CustomDataPath:"c:\OUP.xml" /LicensePath:"c:\OxfordUniversityPressh.4488779F26797_nttgmz6jfxeb6_License1.xml
 
-<br/>
-
-##小结##
+## 小结 ##
 
 　　通过这次问题解决的过程，知道 Windows 10 或者 Windows 8.1 的系统，使用 `dism /online /Add-ProvisionedAppxPackage` 命令会在 `C:\Windows\Logs\DISM\dism.log` 中生成日志。并且，更详细的日志，可以通过 事件管理器->Windows 日志->系统 来查看，或者打开 `C:\Windows\System32\winevt\Logs\Microsoft-Windows-AppXDeploymentServer%4Operational.evtx` 来查看。
 
-##后记##
+## 后记 ##
 
 　　当时我去请教的同事，我们可以叫他 Robell。他对 dism，PowerShell，DOS Script，VB Script 等有比较深的造诣。在这之后不久，他离开了 HP。写这篇文章，也是为了顺便纪念他。^^
 
 <br/>
 
-<div align="right">7/29/2016 10:19:53 AM </div>
+<div align="right">7/29/2016 11:18:38 AM </div>
