@@ -132,11 +132,16 @@ description: ProvisionedAppxPackage 和 AppxPackage 的比较
 　　关于 AppxPackage 和 ProvisionedAppxPackage 的区别，总结如下：<br/>
 　　如果你开发了一款 Modern APP，想安装在用户的机器上，如果你是以 ProvisionedAppxPackage 的方式安装，那么任何新增的用户，都可以在 OOBE 时安装这款 APP，如果你用 AppxPackage 的方式安装，那么只是为当前用户安装，新增用户无法在 OOBE 时安装这款 APP。
 
+　　查到了另一份资料（见参考资料第4条），是 Provisioned Apps 的官方描述：<br/>
+　　Apps that are installed in the Windows image are called **provisioned apps**. Provisioned apps are staged in the image and are **scheduled to be installed for every user** of the Windows image at first logon or at the next logon, if the user account is already created.<br/>
+　　和我本人的总结相类似，说明我的研究和总结是正确的！
+
 ## 参考资料 ##
 
 1. [DISM App Package (.appx or .appxbundle) Servicing Command-Line Options](https://technet.microsoft.com/en-us/library/hh824882.aspx) （通过 DISM 安装 ProvisionedAppxPackage，这是知识点的引入）
 1. [DISM Cmdlets](https://technet.microsoft.com/en-us/library/dn376474.aspx) （PowerShell 的 DISM Cmdlets）
 1. [Appx Module Cmdlets](https://technet.microsoft.com/en-us/library/dn448373.aspx) （PowerShell 的 Appx Module Cmdlets）
+1. [Sideload Apps with DISM](https://msdn.microsoft.com/en-us/windows/hardware/commercialize/manufacture/desktop/sideload-apps-with-dism-s14) （有关 Apps Sideload 的文章，内容广泛）
 
 <br/>
 
