@@ -80,12 +80,44 @@ description: ProvisionedAppxPackage 和 AppxPackage 的比较
 <center>
   <p><img src="/images/provisioned-appx-package/03_cdc_julius_appx_compare.JPG" align="center"></p>
 </center>
-　　可以看到，CDC 有 BingFinance，而 CDC_Julius 没有 BingFinance。
+　　可以看到，CDC 有 BingFinance，而 CDC_Julius 没有 BingFinance。<br/>
+　　由此证明，新账户 OOBE 时会把系统中的 ProvisionedAppxPackage 安装成为 AppxPackage。
 
-　　Get-AppxPackage 有一个参数是 `-AllUsers`，可以取出所有账户下的 AppxPackage 列表。把这个 List 也取出来，用于对比：
+## 番外 ##
+
+### 有关 Get-AppxPackage -AllUsers ###
+
+　　PowerShell 的 Appx Cmdlets 中的 Get-AppxPackage 命令，有一个参数是 `-AllUsers`，可以取出所有账户下的 AppxPackage 列表。
 
 	PowerShell Appx Module Cmdlets Script:
 	PS > Get-AppxPackage -AllUsers
+
+　　在系统中只有 CDC 和 CDC_Temp 两个账户时，摘取 BingFinance 相关信息，如下所示：
+
+	Name                   : Microsoft.BingFinance
+	Publisher              : CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US
+	Architecture           : X86
+	ResourceId             : 
+	Version                : 4.8.239.0
+	PackageFullName        : Microsoft.BingFinance_4.8.239.0_x86__8wekyb3d8bbwe
+	InstallLocation        : C:\Program Files\WindowsApps\Microsoft.BingFinance_4.8.239.0_x86__8wekyb3d8bbwe
+	IsFramework            : False
+	PackageFamilyName      : Microsoft.BingFinance_8wekyb3d8bbwe
+	PublisherId            : 8wekyb3d8bbwe
+	PackageUserInformation : {S-1-5-21-3858193888-3433337990-3667270340-1001 [CDC]: Installed, 
+	                         S-1-5-21-3858193888-3433337990-3667270340-1002 [CDC_Temp]: Installed}
+	IsResourcePackage      : False
+	IsBundle               : False
+	IsDevelopmentMode      : False
+
+　　注意，`PackageUserInformation` 显示了该 AppxPackage 为哪些用户安装了。
+
+### 有关 Remove-AppxPackage ###
+
+　　PowerShell 的 Appx Cmdlets 中的 Remove-AppxPackage 命令，只可以为当前用户移除 AppxPackage。
+
+	PowerShell Appx Module Cmdlets Script:
+	PS > Remove-AppxPackage <string>
 
 ## 小结 ##
 
@@ -100,6 +132,12 @@ description: ProvisionedAppxPackage 和 AppxPackage 的比较
 　　关于 AppxPackage 和 ProvisionedAppxPackage 的区别，总结如下：<br/>
 　　如果你开发了一款 Modern APP，想安装在用户的机器上，如果你是以 ProvisionedAppxPackage 的方式安装，那么任何新增的用户，都可以在 OOBE 时安装这款 APP，如果你用 AppxPackage 的方式安装，那么只是为当前用户安装，新增用户无法在 OOBE 时安装这款 APP。
 
+## 参考资料 ##
+
+1. [DISM App Package (.appx or .appxbundle) Servicing Command-Line Options](https://technet.microsoft.com/en-us/library/hh824882.aspx) （通过 DISM 安装 ProvisionedAppxPackage，这是知识点的引入）
+1. [DISM Cmdlets](https://technet.microsoft.com/en-us/library/dn376474.aspx) （PowerShell 的 DISM Cmdlets）
+1. [Appx Module Cmdlets](https://technet.microsoft.com/en-us/library/dn448373.aspx) （PowerShell 的 Appx Module Cmdlets）
+
 <br/>
 
-<div align="right">8/6/2016 1:23:56 PM </div>
+<div align="right">8/12/2016 3:06:42 PM </div>
