@@ -1,9 +1,9 @@
 ---
 layout: post
-title: mybatis-spring启动过程
+title: mybatis-spring启动过程和调用过程
 categories: blog
 tags: [mybatis]
-description: mybatis-spring启动过程
+description: mybatis-spring启动过程和调用过程
 ---
 
 ## mybatis-spring 可以为我们做什么 ##
