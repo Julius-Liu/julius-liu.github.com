@@ -39,16 +39,16 @@ Article article = articleMapperProxy.selectByPrimaryKey("123");
 
 ```
 
-mybatis-spring 决定接管 sqlSessionFactory 和 sqlSession，并且为 sqlSession 创建代理类 sqlSessionProxy。除此之外，mybatis-spring 决定扫描所有interface层的mapper，然后接管所有 mapper 的代理类。下面我们分开来看。
+## mybatis-spring 启动过程 ##
 
-## sqlSessionFactory 和 sqlSession 的初始化 ##
+我们先来说说mybatis-spring框架的启动过程。mybatis-spring 决定接管 sqlSessionFactory 和 sqlSession，并且为 sqlSession 创建代理类 sqlSessionProxy。除此之外，mybatis-spring 决定扫描所有interface层的mapper，然后接管所有 mapper 的代理类。2条线我们分开来看。
+
+### 线1：sqlSessionFactory 和 sqlSession 的初始化 ###
 
 1. 创建 sqlSessionFactoryBean，这是一个被Spring管理的工厂bean
 2. 创建 sqlSessionFactory，这是一个 Spring 管理的 Bean，属于 mybatis 范畴
 3. 创建 sqlSessionTemplate，其中使用到了 sqlSessionFactory，属于 mybatis-spring 范畴
 4. 创建 sqlSessionProxy
-
-### SqlSessionFactory实例的创建
 
 SqlSessionFactory是一个十分重要的工厂类，让我们来回顾一下SqlSessionFactory中有哪些信息：
 
@@ -66,7 +66,9 @@ sqlSessionFactory
         sqlFragments       # 里面有所有的 sql 片段
 ```
 
-在 mybatis-spring 框架中，sqlSessionFactory由Spring管理，让我们来看一下 sqlSessionFactory是如何创建出来的。
+这些信息非常重要，在不久的将来创建 sqlSessionProxy 和 将来创建 mapperProxy 的时候，都需要使用里面的信息。
+
+在 mybatis-spring 框架中，sqlSessionFactory由Spring管理，让我们来看一下 sqlSessionFactory 是如何创建出来的。
 
 ```
 @Bean(name = "sqlSessionFactory")
@@ -153,9 +155,19 @@ public void afterPropertiesSet() throws Exception {
 }
 ```
 
-buildSqlSessionFactory 的主要方法是：this.sqlSessionFactoryBuilder.build(configuration); 此处不再展开。
+buildSqlSessionFactory 的主要方法是：this.sqlSessionFactoryBuilder.build(configuration); 此处不再展开。到这里为止，sqlSessionFactory 已经创建完成，下面我们来简单看看 sqlSessionTemplate 的创建过程：
 
-## MapperFactoryBean 的初始化 ##
+```
+@Bean
+@ConditionalOnMissingBean
+public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
+    return new SqlSessionTemplate(sqlSessionFactory, this.properties.getExecutorType());
+}
+```
+
+如果跟踪进去，就会发现 new SqlSessionTemplate 的同时，会创建 sqlSessionProxy，此处不再展开。
+
+### 线2：mapper扫描和代理类的创建 ###
 
 1. 使用 MapperScannerConfigurer
 2. scan() 扫描mapper
@@ -169,6 +181,37 @@ buildSqlSessionFactory 的主要方法是：this.sqlSessionFactoryBuilder.build(
 10. 最终得到一组 MapperProxy，他们是原始 mapper 的代理。MapperProxy 实现了 InvocationHandler 接口，其中有 invoke 方法，在实际调用的时候执行。
 
 说明：对于第4点，`MapperFactoryBean` 是一个工厂bean，在spring容器里，工厂bean是有特殊用途的，当spring将工厂bean注入到其他bean里时，它不是注入工厂bean本身，而是调用bean的getObject方法。
+
+## mybatis-spring 调用过程 ##
+
+# mybatis-spring 调用过程
+
+1. 调用 mapper 中的方法
+
+2. MapperProxy     invoke
+- 2.1 if 判断
+- 2.2 else if 判断
+- 2.3 cachedMapperMethod   重点方法
+- 2.4  mapperMethod.execute   重点方法，实际执行的方法
+
+3. 根据sql语句的类型，分情况处理
+- case INSERT
+- case UPDATE
+- case DELETE
+- case SELECT
+- case FLUSH
+
+4. 以 SELECT 情况举例，将会执行 sqlSession.<E> selectList
+
+5. sqlSessionTemplate.sqlSessionProxy.<E> selectList
+
+6. SqlSessionInterceptor       invoke
+- 6.1 getSqlSession，用到了 sqlSessionFactory，使用了sqlSessionHolder 技术，有就拿一个，没有就新建一个。无论如何，都会有一个 sqlSession
+- 6.2 defaultSqlSession.selectList
+重点，之后是 query -> queryFromDatabase -> doQuery -> 1. prepareStatement   2. execute
+- 6.3 closeSqlSession
+
+我们可以发现，在 mybatis-spring 框架中，真正 sqlSession 的创建，是在调用interface中的方法的时候才进行的。更细节的过程可以参考上文。
 
 ## 参考资料 ##
 
